@@ -8,22 +8,22 @@ import { CiAlarmOn } from "react-icons/ci";
 import { BsGraphUp } from "react-icons/bs";
 
 
+import Navbar from "./components/Navbar";
 
 
 
-
-
-export default function Navbar(){
+export default function Page(){
 
  
 
     return(
-        <main>
+  <div>
+       <main>
     
     
 
     
-
+    <Navbar></Navbar>
 
 {/* hero section */}
 <div className="">
@@ -398,5 +398,7 @@ keystroke away.</p>
      
 
 </main>
-    )
+    
+  </div>
+   )
 }
