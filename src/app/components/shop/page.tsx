@@ -1,6 +1,27 @@
 
+"use client"
+
 
 import { IoIosArrowDown } from "react-icons/io";
+
+
+import { IoIosArrowForward } from "react-icons/io";
+import { client } from "../../../sanity/lib/client";
+import { CiAlarmOn } from "react-icons/ci";
+import { BsGraphUp } from "react-icons/bs";
+import { useEffect, useState } from "react";
+import { urlFor } from "@/sanity/lib/image";
+
+interface Product {
+  _id: string;
+  isNew: boolean;
+  dicountPercentage:number;
+  title: string;
+  productImage: string;     
+  description: string;
+  price: number;
+  tags: string[];
+}
 
 
 
@@ -9,6 +30,23 @@ import { TfiMenuAlt } from "react-icons/tfi";
 import { MdWindow } from "react-icons/md";
 
 export default function Shop(){
+
+  const [isData,setIsData] = useState<Product[]>([]);
+    useEffect(()=>{
+    async function getProducts(){
+        
+    const query = `
+    *[_type=="product"]{
+    isNew,title,productImage,description,price,tags[0]
+  }`;
+  
+  const responce = await client.fetch(query);
+  setIsData(responce);
+  console.log(responce)
+      }
+      getProducts();
+    },[])
+  
     return(
 <main>
         <div className="w-[1440px] h-[371px] bg-gray-50 py-8">
@@ -62,201 +100,33 @@ export default function Shop(){
 
 
 
-
-
-
-    <div>
-
-
-  <div className="ml-[100px] grid grid-cols-4 mt-20">
-  <img src="/gp8.jpeg" alt="" className="w-[239px] h-[427px]" />
-  <img src="/gp1.jpeg" alt="" className="w-[239px] h-[427px]" />
-  <img src="/gp2.jpeg" alt="" className="w-[239px] h-[427px]" />
-  <img src="/gp3.jpeg" alt="" className="w-[239px] h-[427px]" />
-  </div>
-  <div className="flex items-center  text-center">
-  <div className="mt-6 ml-[150px]">
-    <h1 className="font-semibold text-blue-950">Graphic Design</h1>
-    <p className="font-semibold text-gray-500 mt-4">English Department</p>
-    <p className="mt-4 text-gray-400 font-semibold">$16.48 <span className="text-green-700">$6.48</span></p>
-   
-  </div>
-  <div className="mt-6 ml-[170px]">
-    <h1 className="font-semibold text-blue-950">Graphic Design</h1>
-    <p className="font-semibold text-gray-500 mt-4">English Department</p>
-    <p className="mt-4 text-gray-400 font-semibold">$16.48 <span className="text-green-700">$6.48</span></p>
-  </div>
-  <div className="mt-6 ml-[180px]">
-    <h1 className="font-semibold text-blue-950">Graphic Design</h1>
-    <p className="font-semibold text-gray-500 mt-4">English Department</p>
-    <p className="mt-4 text-gray-400 font-semibold">$16.48 <span className="text-green-700">$6.48</span></p>
-  </div>
-  <div className="mt-6 ml-[190px]">
-    <h1 className="font-semibold text-blue-950">Graphic Design</h1>
-    <p className="font-semibold text-gray-500 mt-4">English Department</p>
-    <p className="mt-4 text-gray-400 font-semibold">$16.48 <span className="text-green-700">$6.48</span></p>
-  </div>
-  </div>
-
-<div className="flex">
-
-  <div className="flex mt-4 ml-[170px] space-x-2">
-    <div className="w-5 h-5 rounded-full bg-sky-500"/>
-    <div className="w-5 h-5 rounded-full bg-green-700"/>
-    <div className="w-5 h-5 rounded-full bg-orange-500"/>
-    <div className="w-5 h-5 rounded-full bg-black"/>
-    </div>
-    <div className="flex mt-4 ml-[220px] space-x-2">
+<div className="grid grid-cols-4 justify-center m-auto">
+  {isData.length > 0 ? (
+    isData.map((item) => (
+      <div key={item.price} className="m-auto flex flex-col gap-4">
+        <img src={urlFor(item.productImage).url()} width={200} alt={item.title} />
+        <div className="text-center content">
+          <h4 className="text-[black]">{item.title}</h4>
+          <p className="text-[#838383]">{`$${item.price}`}</p>
+          <p className="text-green-600">{item.isNew ? "New" : "Used"}</p>
+          <div className="flex gap-2 justify-center mt-4 m-auto ">
     <div className="w-5 h-5 rounded-full bg-sky-500"/>
     <div className="w-5 h-5 rounded-full bg-green-700"/>
     <div className="w-5 h-5 rounded-full bg-orange-500"/>
     <div className="w-5 h-5 rounded-full bg-black"/>
     </div>
 
-    <div className="flex mt-4 ml-[230px] space-x-2">
-    <div className="w-5 h-5 rounded-full bg-sky-500"/>
-    <div className="w-5 h-5 rounded-full bg-green-700"/>
-    <div className="w-5 h-5 rounded-full bg-orange-500"/>
-    <div className="w-5 h-5 rounded-full bg-black"/>
-    </div>
-
-    <div className="flex mt-4 ml-[240px] space-x-2">
-    <div className="w-5 h-5 rounded-full bg-sky-500"/>
-    <div className="w-5 h-5 rounded-full bg-green-700"/>
-    <div className="w-5 h-5 rounded-full bg-orange-500"/>
-    <div className="w-5 h-5 rounded-full bg-black"/>
-    </div>
-
-    </div>
+        </div>
+      </div>
+    ))
+  ) : (
+    <p>Loading products...</p>
+  )}
+</div>
 
 
 
-    <div className="ml-[100px] grid grid-cols-4 mt-20">
-  <img src="/gp4.jpeg" alt="" className="w-[239px] h-[427px]" />
-  <img src="/gp5.jpeg" alt="" className="w-[239px] h-[427px]" />
-  <img src="/gp6.jpeg" alt="" className="w-[239px] h-[427px]" />
-  <img src="/gp7.jpeg" alt="" className="w-[239px] h-[427px]" />
-  </div>
-  <div className="flex items-center  text-center">
-  <div className="mt-6 ml-[150px]">
-    <h1 className="font-semibold text-blue-950">Graphic Design</h1>
-    <p className="font-semibold text-gray-500 mt-4">English Department</p>
-    <p className="mt-4 text-gray-400 font-semibold">$16.48 <span className="text-green-700">$6.48</span></p>
-   
-  </div>
-  <div className="mt-6 ml-[170px]">
-    <h1 className="font-semibold text-blue-950">Graphic Design</h1>
-    <p className="font-semibold text-gray-500 mt-4">English Department</p>
-    <p className="mt-4 text-gray-400 font-semibold">$16.48 <span className="text-green-700">$6.48</span></p>
-  </div>
-  <div className="mt-6 ml-[180px]">
-    <h1 className="font-semibold text-blue-950">Graphic Design</h1>
-    <p className="font-semibold text-gray-500 mt-4">English Department</p>
-    <p className="mt-4 text-gray-400 font-semibold">$16.48 <span className="text-green-700">$6.48</span></p>
-  </div>
-  <div className="mt-6 ml-[190px]">
-    <h1 className="font-semibold text-blue-950">Graphic Design</h1>
-    <p className="font-semibold text-gray-500 mt-4">English Department</p>
-    <p className="mt-4 text-gray-400 font-semibold">$16.48 <span className="text-green-700">$6.48</span></p>
-  </div>
-  </div>
-
-<div className="flex">
-
-  <div className="flex mt-4 ml-[170px] space-x-2">
-    <div className="w-5 h-5 rounded-full bg-sky-500"/>
-    <div className="w-5 h-5 rounded-full bg-green-700"/>
-    <div className="w-5 h-5 rounded-full bg-orange-500"/>
-    <div className="w-5 h-5 rounded-full bg-black"/>
-    </div>
-    <div className="flex mt-4 ml-[220px] space-x-2">
-    <div className="w-5 h-5 rounded-full bg-sky-500"/>
-    <div className="w-5 h-5 rounded-full bg-green-700"/>
-    <div className="w-5 h-5 rounded-full bg-orange-500"/>
-    <div className="w-5 h-5 rounded-full bg-black"/>
-    </div>
-
-    <div className="flex mt-4 ml-[230px] space-x-2">
-    <div className="w-5 h-5 rounded-full bg-sky-500"/>
-    <div className="w-5 h-5 rounded-full bg-green-700"/>
-    <div className="w-5 h-5 rounded-full bg-orange-500"/>
-    <div className="w-5 h-5 rounded-full bg-black"/>
-    </div>
-
-    <div className="flex mt-4 ml-[240px] space-x-2">
-    <div className="w-5 h-5 rounded-full bg-sky-500"/>
-    <div className="w-5 h-5 rounded-full bg-green-700"/>
-    <div className="w-5 h-5 rounded-full bg-orange-500"/>
-    <div className="w-5 h-5 rounded-full bg-black"/>
-    </div>
-
-    </div>
-
-
-
-    <div className="ml-[100px] grid grid-cols-4 mt-20">
-  <img src="/shop6.jpeg" alt="" className="w-[239px] h-[427px]" />
-  <img src="/shop7.jpeg" alt="" className="w-[239px] h-[427px]" />
-  <img src="/shop8.jpeg" alt="" className="w-[239px] h-[427px]" />
-  <img src="/shop9.jpeg" alt="" className="w-[239px] h-[427px]" />
-  </div>
-  <div className="flex items-center  text-center">
-  <div className="mt-6 ml-[150px]">
-    <h1 className="font-semibold text-blue-950">Graphic Design</h1>
-    <p className="font-semibold text-gray-500 mt-4">English Department</p>
-    <p className="mt-4 text-gray-400 font-semibold">$16.48 <span className="text-green-700">$6.48</span></p>
-   
-  </div>
-  <div className="mt-6 ml-[170px]">
-    <h1 className="font-semibold text-blue-950">Graphic Design</h1>
-    <p className="font-semibold text-gray-500 mt-4">English Department</p>
-    <p className="mt-4 text-gray-400 font-semibold">$16.48 <span className="text-green-700">$6.48</span></p>
-  </div>
-  <div className="mt-6 ml-[180px]">
-    <h1 className="font-semibold text-blue-950">Graphic Design</h1>
-    <p className="font-semibold text-gray-500 mt-4">English Department</p>
-    <p className="mt-4 text-gray-400 font-semibold">$16.48 <span className="text-green-700">$6.48</span></p>
-  </div>
-  <div className="mt-6 ml-[190px]">
-    <h1 className="font-semibold text-blue-950">Graphic Design</h1>
-    <p className="font-semibold text-gray-500 mt-4">English Department</p>
-    <p className="mt-4 text-gray-400 font-semibold">$16.48 <span className="text-green-700">$6.48</span></p>
-  </div>
-  </div>
-
-<div className="flex">
-
-  <div className="flex mt-4 ml-[170px] space-x-2">
-    <div className="w-5 h-5 rounded-full bg-sky-500"/>
-    <div className="w-5 h-5 rounded-full bg-green-700"/>
-    <div className="w-5 h-5 rounded-full bg-orange-500"/>
-    <div className="w-5 h-5 rounded-full bg-black"/>
-    </div>
-    <div className="flex mt-4 ml-[220px] space-x-2">
-    <div className="w-5 h-5 rounded-full bg-sky-500"/>
-    <div className="w-5 h-5 rounded-full bg-green-700"/>
-    <div className="w-5 h-5 rounded-full bg-orange-500"/>
-    <div className="w-5 h-5 rounded-full bg-black"/>
-    </div>
-
-    <div className="flex mt-4 ml-[230px] space-x-2">
-    <div className="w-5 h-5 rounded-full bg-sky-500"/>
-    <div className="w-5 h-5 rounded-full bg-green-700"/>
-    <div className="w-5 h-5 rounded-full bg-orange-500"/>
-    <div className="w-5 h-5 rounded-full bg-black"/>
-    </div>
-
-    <div className="flex mt-4 ml-[240px] space-x-2">
-    <div className="w-5 h-5 rounded-full bg-sky-500"/>
-    <div className="w-5 h-5 rounded-full bg-green-700"/>
-    <div className="w-5 h-5 rounded-full bg-orange-500"/>
-    <div className="w-5 h-5 rounded-full bg-black"/>
-    </div>
-
-    </div>
-
-  </div>
-
+ 
   <div className="w-[313px] h-[74px] border border-gray-400 mt-16  ml-[550px] rounded-lg shadow-md flex ]">
 <p className="text-gray-400 py-6 w-20 items-center text-center bg-gray-100">First</p>
 <p className="text-sky-500 py-6 w-12 items-center text-center bg-white">1</p>
